@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model UserDID {
+  id         String   @id @default(cuid())
+  did        String   @unique
+  publicKey  String
+  privateKey String?  // For demo purposes only - never store private keys in production!
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("user_dids")
+}
+
+model VerificationChallenge {
+  id        String   @id @default(cuid())
+  challenge String   @unique
+  did       String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("verification_challenges")
+}
+
+model DIDOperation {
+  id             String   @id @default(cuid())
+  did            String
+  operationType  String
+  operationData  Json
+  status         String   @default("awaiting_signature")
+  signingPayload String
+  signature      String?
+  expiresAt      DateTime
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("did_operations")
+}
