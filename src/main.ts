@@ -5,7 +5,9 @@ import { AppModule } from './app.module';            // Root application module
 import { HttpExceptionFilter } from './filters/http-exception.filter'; // Error handler
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);   // Create NestJS application instance
+  const app = await NestFactory.create(AppModule, {
+    logger: ['error', 'warn', 'log', 'debug', 'verbose'], // Enable detailed logging
+  });   // Create NestJS application instance
   
   // Global validation pipe - validates all incoming requests
   app.useGlobalPipes(new ValidationPipe({

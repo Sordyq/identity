@@ -11,7 +11,7 @@ model UserDID {
   id         String   @id @default(cuid())
   did        String   @unique
   publicKey  String
-  privateKey String?  // For demo purposes only - never store private keys in production!
+  privateKey String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -29,16 +29,20 @@ model VerificationChallenge {
 }
 
 model DIDOperation {
-  id             String   @id @default(cuid())
-  did            String
-  operationType  String
-  operationData  Json
-  status         String   @default("awaiting_signature")
-  signingPayload String
-  signature      String?
-  expiresAt      DateTime
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id              String    @id @default(cuid())
+  did             String
+  operationType   String
+  operationData   Json
+  status          String    @default("awaiting_signature")
+  signingPayload  String
+  signature       String?
+  expiresAt       DateTime
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  signerPublicKey String?
+  wcExpiry        DateTime?
+  wcTopic         String?
+  wcUri           String?
 
   @@map("did_operations")
 }

@@ -1,9 +1,9 @@
 const { PrivateKey } = require("@hashgraph/sdk");
 
 // Your generated private key from the output
-const PRIVATE_KEY_HEX = "302e020100300506032b6570042204209032fdaac6b2a3b86c03c115c94377fa8e9537d42794989004d7dc23964e7166";
+const PRIVATE_KEY_HEX = "302e020100300506032b657004220420da04ac74a4a382387a4fb817b773701bc817eeb71b7b87712107a28c3241057a";
 
-const MESSAGE = "b7e8a2d31971521f03a77bee8c859ccc"; // Your challenge from Postman
+const MESSAGE = "cmfxw8kn200020mscamc9nmga"; // Your challenge from Postman
 
 async function signMessage() {
   try {
