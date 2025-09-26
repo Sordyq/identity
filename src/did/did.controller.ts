@@ -35,4 +35,15 @@ export class DidController {
     const publicKey = await this.didService.getPublicKey(did);
     return { did, publicKey };
   }
+
+  @Post('push-signing-request/:operationId')
+  async pushSigningRequest(@Param('operationId') operationId: string) {
+    return await this.didService.pushSigningRequestByOpId(operationId);
+  }
+
+  // In did.controller.ts
+  @Get('connection-status/:operationId')
+  async checkConnectionStatus(@Param('operationId') operationId: string) {
+    return await this.didService.checkConnectionStatus(operationId);
+  }
 }

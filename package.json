@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@golevelup/nestjs-rabbitmq": "^5.5.0",
+    "@hashgraph/proto": "^2.23.0",
     "@hashgraph/sdk": "^2.73.1",
     "@nestjs/axios": "^3.0.2",
     "@nestjs/bull": "^10.2.1",
@@ -64,6 +65,7 @@
     "otpauth": "^9.3.4",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
+    "protobufjs": "^7.5.4",
     "qrcode": "^1.5.4",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
