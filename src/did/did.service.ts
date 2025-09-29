@@ -243,7 +243,7 @@ export class DidService {
         message: canonical,
         expiresAt: operation.expiresAt,
         wcUri: uri,
-        wcQrCode: qrCodeDataUrl,
+        // wcQrCode: qrCodeDataUrl,
       };
     } catch (error) {
       this.logger.error('Failed to create WalletConnect pairing', error);

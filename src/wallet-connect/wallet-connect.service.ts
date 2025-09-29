@@ -17,7 +17,7 @@ export class WalletConnectService {
       projectId: 'c574af18f76e568bc5848dbd8406275d',
       relayUrl: 'wss://relay.walletconnect.org',
       metadata: {
-        name: 'Hedera DID Service',
+        name: 'Tulu DID Management',
         description: 'DID operations over WalletConnect',
         url: 'http://localhost:3000',
         icons: ['https://walletconnect.com/walletconnect-logo.png'],
