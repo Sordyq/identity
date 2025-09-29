@@ -48,3 +48,41 @@ model DIDOperation {
 
   @@map("did_operations")
 }
+
+model userdata_tb {
+  user_id    String   @id @db.VarChar(128)
+  email      String?  @unique
+  pubKey     String?  // user public key hex
+  privateKey String?  // ⚠️ user's private key (stored encrypted in DB)
+  wallet     wallet_tb?
+  txs        transaction_tb[]
+}
+
+
+model wallet_tb {
+  id        String   @id @default(uuid())
+  user_id   String   @unique
+  currency  String
+  accountId   String
+  balance   Decimal  @db.Decimal(20, 8) @default(0.0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user userdata_tb @relation(fields: [user_id], references: [user_id])
+}
+
+model transaction_tb {
+  id            String   @id @default(uuid())
+  user_id       String
+  type          String   // Deposit | Withdraw
+  status        String   // Pending | Success | Failed
+  amount        Decimal  @db.Decimal(20, 8)
+  currency      String
+  network       String
+  walletAddress String?
+  txHash        String?
+  createdAt     DateTime @default(now())
+
+  user userdata_tb @relation(fields: [user_id], references: [user_id])
+}
+
