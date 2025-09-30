@@ -65,22 +65,22 @@ async function main() {
     const userId = 'user_' + randomUUID().slice(0, 8);
     const walletId = 'wallet_' + randomUUID().slice(0, 8);
 
-    const user = await prisma.userdata_tb.create({
+    const user = await prisma.business_tb.create({
         data: {
-            user_id: userId,
-            email: `${userId}@test.com`,
-            pubKey: userPublicKey.toString(),
+            bus_id: userId,
+            business_email: `${userId}@test.com`,
+            publicKey: userPublicKey.toString(),
             privateKey: userPrivateKey.toString(),
         },
     });
 
-    const wallet = await prisma.wallet_tb.create({
+    const wallet = await prisma.wallets_tb.create({
         data: {
-            id: walletId,
-            user_id: userId,
+            userid: userId,
             currency: 'USDT',
-            balance: 0, // give user 5000 USDT for testing in DB
-            accountId: newAccountId,
+            address: newAccountId,
+            chain: 'HEDERA',
+            publickey: walletId,
         },
     });
 

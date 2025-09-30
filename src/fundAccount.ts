@@ -11,11 +11,11 @@ async function fundAccount() {
     const usdtId = TokenId.fromString(process.env.USDT_TOKEN_ID!);
 
     const sender = process.env.HEDERA_OPERATOR_ID!;   // treasury
-    const recipient = "0.0.6925379";                  // user account
+    const recipient = "0.0.6930177";                  // user account
 
     const tx = await new TransferTransaction()
-        .addTokenTransfer(usdtId, sender, -5000)        // deduct from treasury
-        .addTokenTransfer(usdtId, recipient, 5000)      // credit to user
+        .addTokenTransfer(usdtId, sender, -1000)        // deduct from treasury
+        .addTokenTransfer(usdtId, recipient, 1000)      // credit to user
         .execute(client);
 
     const receipt = await tx.getReceipt(client);

@@ -49,40 +49,128 @@ model DIDOperation {
   @@map("did_operations")
 }
 
-model userdata_tb {
-  user_id    String   @id @db.VarChar(128)
-  email      String?  @unique
-  pubKey     String?  // user public key hex
-  privateKey String?  // ⚠️ user's private key (stored encrypted in DB)
-  wallet     wallet_tb?
-  txs        transaction_tb[]
+model transactions_tb {
+  transaction_id           String    @id @default("0") @db.VarChar(128)
+  source_acct              String?   @db.VarChar(100)
+  destination_acct         String?   @db.VarChar(100)
+  trans_type               String?   @db.VarChar(50)
+  transaction_desc         String?
+  transaction_amount       Decimal?  @db.Decimal(50, 2)
+  response_code            String?   @db.VarChar(100)
+  payment_mode             String?   @db.VarChar(50)
+  initial_balance          Decimal?  @db.Decimal(50, 2)
+  current_balance          Decimal?  @db.Decimal(50, 2)
+  receiver_initial_balance Decimal?  @db.Decimal(50, 4)
+  receiver_current_balance Decimal?  @db.Decimal(50, 4)
+  posted_ip                String?   @db.VarChar(50)
+  created                  String?   @db.VarChar(64)
+  posted_user              String?   @db.VarChar(100)
+  merchant_category        String?   @db.VarChar(4)
+  settlement_status        Int?      @default(0)
+  order_id                 String?   @unique(map: "OrderIDIndex") @db.VarChar(200)
+  category                 String?   @db.VarChar(16)
+  session_id               String?   @db.VarChar(200)
+  xml_data                 String?
+  tranx_desc               String?   @db.VarChar(200)
+  debit_flag               Int?
+  debit_flag_date          DateTime? @db.Date
+  reversal_flag            Int?
+  reversal_flag_date       DateTime? @db.Date
+  trans_query_id           String?   @db.VarChar(128)
+  merchant_commission      Decimal?  @db.Decimal(50, 2)
+  chargefee                Decimal?  @db.Decimal(50, 2)
+  net_debit_amount         Decimal?  @db.Decimal(50, 2)
+  card_id                  Int?
+  response_message         String?   @db.VarChar(100)
+  charge_currency          String?   @db.VarChar(10)
+  disburse_currency        String?   @db.VarChar(10)
+  exchange_rate            Decimal?  @db.Decimal(16, 12)
+  archived                 Int?
+  transaction_hash         String?   @db.VarChar(190)
+  gateway_response_message String?   @db.VarChar(250)
+  voucher_fee              Decimal?  @db.Decimal(2, 0)
+  gateway_fee              Decimal?  @db.Decimal(2, 0)
+  client_phone             String?   @db.VarChar(50)
+  payment_gateway          String?   @db.VarChar(80)
+  tokenize                 Int?
+  user_id                  String?   @db.VarChar(64)
+  dev_id                   String?   @db.VarChar(64)
+  month                    String?   @db.VarChar(12)
+  recipient_name           String?   @db.VarChar(72)
+  refund                   String?   @db.VarChar(1)
+  token_address            String?   @db.VarChar(90)
+  token_response           String?   @db.VarChar(20)
+  token_time_exceeded      Int?
+  token_value_diff         Int?
+  token_value_received     String?   @db.VarChar(20)
+  token_value_supplied     Int?
+  token_message            String?   @db.VarChar(250)
+  hashscanUrl              String?   @db.VarChar(180)
+  chain                    String?   @db.VarChar(50)
+
+  @@index([posted_user], map: "PuI")
+  @@index([response_code], map: "RCI")
+  @@index([settlement_status], map: "SSi")
+  @@index([created], map: "cDai")
+  @@index([merchant_category], map: "mCI")
+  @@index([trans_type], map: "typeT")
 }
 
-
-model wallet_tb {
-  id        String   @id @default(uuid())
-  user_id   String   @unique
-  currency  String
-  accountId   String @unique
-  balance   Decimal  @db.Decimal(20, 8) @default(0.0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user userdata_tb @relation(fields: [user_id], references: [user_id])
+model wallets_tb {
+  userid                String                @unique(map: "wallets_userid_unique") @db.VarChar(128)
+  chain                 String                @db.VarChar(36)
+  currency              String                @db.VarChar(36)
+  privateKey            String?               @db.VarChar(128)
+  mnemonic              String?               @db.VarChar(128)
+  address               String?               @db.VarChar(128)
+  publickey             String?               @db.VarChar(128)
+  hexprivatekey         String?               @db.VarChar(128)
+  
+  // Optional relation to business_tb
+  business_tb           business_tb?          @relation(fields: [userid], references: [bus_id])
+  
+  @@id([userid, chain, currency])
 }
 
-model transaction_tb {
-  id            String   @id @default(uuid())
-  user_id       String
-  type          String   // Deposit | Withdraw
-  status        String   // Pending | Success | Failed
-  amount        Decimal  @db.Decimal(20, 8)
-  currency      String
-  network       String
-  walletAddress String?
-  txHash        String?
-  createdAt     DateTime @default(now())
-
-  user userdata_tb @relation(fields: [user_id], references: [user_id])
+model business_tb {
+  bus_id               String     @id @db.VarChar(72)
+  businessname         String?    @db.VarChar(128)
+  trading_name         String?    @db.VarChar(128)
+  country              String?    @db.VarChar(128)
+  business_phone       String?    @db.VarChar(128)
+  businessType         String?    @db.VarChar(36)
+  Address              String?    @db.VarChar(128)
+  industry             String?    @db.VarChar(36)
+  business_email       String?    @db.VarChar(128)
+  category             String?    @db.VarChar(36)
+  aboutbusiness        String?
+  businesswebsite      String?    @db.VarChar(64)
+  logo                 String?    @db.VarChar(128)
+  identity             String?    @db.VarChar(128)
+  proofofaddress       String?    @db.VarChar(128)
+  country_code         String?    @db.VarChar(6)
+  complianceStatus     String?    @db.VarChar(12)
+  business_description String?    @db.VarChar(255)
+  registration_type    String?    @db.VarChar(64)
+  privateKey           String?    @db.VarChar(120)
+  publicKey            String?    @db.VarChar(120)
+  region               String?    @db.VarChar(16)
+  city                 String?    @db.VarChar(32)
+  dispute_email        String?    @db.VarChar(72)
+  business_address     String?    @db.VarChar(180)
+  account_number       String?    @db.VarChar(12)
+  account_name         String?    @db.VarChar(72)
+  bank_name            String?    @db.VarChar(36)
+  bvn                  String?    @db.VarChar(12)
+  webhook              String?    @db.VarChar(128)
+  support_email        String?    @db.VarChar(72)
+  approved_status      Int?       @default(0)
+  approved_message     String?
+  pin                  String?    @db.VarChar(6)
+  approved_officer     String?    @db.VarChar(180)
+  did                  String?    @db.VarChar(128)
+  parent_schema_id     String?    @unique(map: "parent_schema_id") @db.VarChar(128)
+  
+  // FIXED: Remove the relation attributes to make it optional
+  wallets_tb           wallets_tb?
 }
-

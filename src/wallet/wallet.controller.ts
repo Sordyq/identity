@@ -5,6 +5,8 @@ import {
   Body,
   UseGuards,
   Req,
+  Param,
+  Query,
 } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { WithdrawDto } from './dto/wallet.dto';
@@ -15,16 +17,19 @@ export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
   // GET /wallet/balance
-  @Get('balance')
-  async getBalance() {
-    const user_id = "user_512cef6b";
-    return this.walletService.getBalance(user_id);
+  @Get(":bus_id/balance")
+  async getBalance(
+    @Param("bus_id") bus_id: string,
+    @Query("chain") chain?: string,
+    @Query("currency") currency?: string
+  ) {
+    return this.walletService.getBalance(bus_id, { chain, currency });
   }
 
   // GET /wallet/transactions
   @Get('transactions')
   async getTransactions() {
-    const user_id = "user_512cef6b";
+    const user_id = "user_86669960";
     return this.walletService.getTransactions(user_id);
   }
 
@@ -33,7 +38,7 @@ export class WalletController {
   async withdraw(
     @Body() dto: WithdrawDto,
   ) {
-    const user_id = "user_512cef6b";
+    const user_id = "user_86669960";
     return this.walletService.withdraw(user_id, dto);
   }
 }
